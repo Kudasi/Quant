@@ -8,7 +8,8 @@ protected:
 
   uint8_t lineSensors; // Hope there will not be some version with more than 8 line sensors...
   uint8_t lineSensorCount, wallSensorCount;
-  float left, right, speed, balance;
+  float left = 0.0, right = 0.0, speed = 0.8, balance = 0.0;
+  float accX = 0.0, accY = 0.0, accZ = 0.0, roll = 0.0, pitch = 0.0, yaw = 0.0;
   
   QuantBase(uint8_t lineSensorCount, uint8_t wallSensorCount) {
     this->lineSensorCount = lineSensorCount;
@@ -27,6 +28,9 @@ public:
   // Wall sensors
   virtual void readWallSensors();
   virtual float getWallSensorValue(uint8_t sensor);
+
+  // IMU
+  virtual void readIMU();
 
   // Motors
   virtual void updateMotors();
@@ -48,31 +52,52 @@ public:
       direction += (i + 0.5 - c / 2.0) * sensor;
       k += sensor;
     }
-    return direction / k;
+    if (k) return direction / k;
+    return 0;
   }
 
   uint8_t getWallSensorCount() {
     return wallSensorCount;
   }
+
+  float getAccX() {
+    return accX;
+  }
+
+  float getAccY() {
+    return accY;
+  }
+
+  float getAccZ() {
+    return accY;
+  }
+
+  float getRoll() {
+    return roll;
+  }
+
+  float getPitch() {
+    return pitch;
+  }
+
+  float getYaw() {
+    return yaw;
+  }
   
   void setLeft(float left) {
     this -> left = left;
-    updateMotors();
   }
   
   void setRight(float right) {
     this -> right = right;
-    updateMotors();
   }
   
   void setSpeed(float speed) {
     this -> speed = speed;
-    updateMotors();
   }
   
   void setBalance(float balance) {
     this -> balance = balance;
-    updateMotors();
   }
 };
 

@@ -51,6 +51,10 @@ public:
     return wallSensors[sensor];
   }
 
+  void readIMU() override {
+    Serial.println("Quant 2.0 have no IMU!");
+  }
+
   void updateMotors() override {
     analogWrite(5 , left  * speed * 255 * min(1.0 - balance, 1.0));
     analogWrite(10, right * speed * 255 * min(1.0 + balance, 1.0));

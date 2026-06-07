@@ -1,5 +1,7 @@
 #pragma once
 
+#include <Wire.h>
+
 #define Q3_1 301
 
 #define MUX_IN1  7
@@ -11,6 +13,15 @@
 #define WS_COUNT 3
 
 #define WS_ANALOG_TO_RELATIVE(pin) (pow(analogRead(pin) / 300.0, 0.5))
+
+#define MPU_ADDR           0x68
+#define MPU_CONFIG     0x1A
+#define MPU_ACCEL_CONFIG   0x1C
+#define MPU_ACCEL_START    0x3B
+#define MPU_POWER_MGMT 0x6B
+
+#define SCALE   16384.0
+#define GRAVITY 9.80665
 
 template <bool Debug>
 class Quant<Q3_1, Debug> : public QuantBase {
@@ -30,10 +41,33 @@ public:
     pinMode(MUX_IN1, OUTPUT);
     pinMode(MUX_IN2, OUTPUT);
     pinMode(MUX_IN3, OUTPUT);
+
+    Wire.begin();
+
+    Wire.beginTransmission(MPU_ADDR);
+    Wire.write(MPU_POWER_MGMT);
+    Wire.write(0);
+    int err = Wire.endTransmission();
     
     if constexpr (Debug) {
+      if (err) {
+        Serial.print("Error: IMU initialization failed! Code: ");
+        Serial.println(err);
+      }
       Serial.println("Running version 3.1!");
     }
+
+    if (err) return;
+
+    Wire.beginTransmission(MPU_ADDR);
+    Wire.write(MPU_ACCEL_CONFIG);
+    Wire.write(0);
+    Wire.endTransmission();
+
+    Wire.beginTransmission(MPU_ADDR);
+    Wire.write(MPU_CONFIG);
+    Wire.write(0x4);
+    Wire.endTransmission();
   }
 
   void readLineSensors() override {
@@ -69,6 +103,11 @@ public:
 
   float getWallSensorValue(uint8_t sensor) override {
     return wallSensors[sensor];
+  }
+
+  void readIMU() override {
+    // Wire.beginTransmission();
+    // Wire.write(MP);
   }
 
   void updateMotors() override {

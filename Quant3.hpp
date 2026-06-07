@@ -29,5 +29,9 @@ public:
   void readLineSensors() override {
     lineSensors = 0;
   }
+
+  void readIMU() override {
+    
+  }
   
 };
