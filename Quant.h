@@ -85,19 +85,19 @@ public:
   }
   
   void setLeft(float left) {
-    this -> left = left;
+    this -> left = constrain(left, -1.0, 1.0);
   }
   
   void setRight(float right) {
-    this -> right = right;
+    this -> right = constrain(right, -1.0, 1.0);
   }
   
   void setSpeed(float speed) {
-    this -> speed = speed;
+    this -> speed = constrain(speed, 0.0, 1.0);
   }
   
   void setBalance(float balance) {
-    this -> balance = balance;
+    this -> balance = constrain(balance, -1.0, 1.0);
   }
 };
 

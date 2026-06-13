@@ -56,8 +56,8 @@ public:
   }
 
   void updateMotors() override {
-    analogWrite(5 , left  * speed * 255 * min(1.0 - balance, 1.0));
-    analogWrite(10, right * speed * 255 * min(1.0 + balance, 1.0));
+    analogWrite(5 , fabs(left)  * speed * 255 * min(1.0 - balance, 1.0));
+    analogWrite(10, fabs(right) * speed * 255 * min(1.0 + balance, 1.0));
 
     digitalWrite(6, left  < 0);
     digitalWrite(7, left  > 0);
