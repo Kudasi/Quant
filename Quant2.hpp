@@ -4,7 +4,7 @@
 
 #define LS_COUNT 5
 #define WS_COUNT 3
-#define WS_ANALOG_TO_RELATIVE(pin) (pow(analogRead(pin) / 300.0, 0.5))
+#define WS_ANALOG_TO_RELATIVE(pin) (1.0 - pow(analogRead(pin) / 300.0, 0.5))
 
 template <bool Debug>
 class Quant<Q2, Debug> : public QuantBase {
