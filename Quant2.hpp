@@ -24,7 +24,7 @@ public:
   }
 
   void readLineSensors() override {
-    lineSensors = PORTC & 31;
+    lineSensors = ~PORTC & 31;
     
     if constexpr (Debug) {
       Serial.print("Line sensors updated: [ ");

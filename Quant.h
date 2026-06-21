@@ -4,6 +4,16 @@
 
 class QuantBase {
 
+private:
+  uint8_t countBits(uint8_t bits) {
+    int count = 0;
+    while (bits) {
+        bits &= (bits - 1);
+        count++;
+    }
+    return count;
+  }
+
 protected:
 
   uint8_t lineSensors; // Hope there will not be some version with more than 8 line sensors...
@@ -45,15 +55,18 @@ public:
   }
 
   float getLineSensorsDirection() {
+    int k = countBits(lineSensors);
+    if (!k) return 0;
     float direction = 0.0;
-    int k = 0;
     for (int i = 0, c = lineSensorCount; i < c; i++) {
       bool sensor = getLineSensorValue(i);
       direction += (i + 0.5 - c / 2.0) * sensor;
-      k += sensor;
     }
-    if (k) return direction / k;
-    return 0;
+    return direction / k;
+  }
+
+  uint8_t getLineSensorsTriggered() {
+    return countBits(lineSensors);
   }
 
   uint8_t getWallSensorCount() {
