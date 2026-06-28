@@ -7,30 +7,28 @@
 #define MUX_IN3 A1
 #define MUX_OUT A0
 
-#define LS_COUNT 8
-
-template <bool Debug>
-class Quant<Q3, Debug> : public QuantBase {
+template <uint16_t Features>
+class Quant<Q3, Features> : public QuantBase<8, 3, Features> {
 public:
-  
-  Quant() : QuantBase(LS_COUNT, 3) {}
 
-  void begin() override {
+  Quant() : QuantBase<8, 3, Features>() {}
+
+  void _begin() override {
     pinMode(5,  OUTPUT);
     pinMode(6,  OUTPUT);
     pinMode(9,  OUTPUT);
     pinMode(10, OUTPUT);
     
-    if constexpr (Debug) {
+    if constexpr (Features & DEBUG) {
       Serial.println("Running version 3.0!");       
     }
   }
 
-  void readLineSensors() override {
-    lineSensors = 0;
+  void _readLineSensors() override {
+    this->lineSensorBits = 0;
   }
 
-  void readIMU() override {
+  void _readIMU() override {
     
   }
   
